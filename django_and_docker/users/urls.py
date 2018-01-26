@@ -27,6 +27,6 @@ urlpatterns = [
         view=views.UserUpdateView.as_view(),
         name='update'
     ),
-    url(r'^api/v1/hello/(?P<hello_message>.+)$', api_v1.Hello_Tracker.as_view(), name='hello_tracker'),
-
+    url(r'^api/v1/hello_1/(?P<hello_message>.+)$', api_v1.Hello_Tracker_1.as_view(), name='hello_tracker_1'),
+    url(r'^api/v1/hello_2/$', api_v1.Hello_Tracker_2.as_view(), name='hello_tracker_2'),   
 ]
