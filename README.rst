@@ -18,7 +18,7 @@ To ensure Docker version and avoid library conflict, remove older versions of Do
 
 Install Docker CE
 ^^^^^^^^^^^^^^^^^
-Docker CE could be installed in different ways:
+Docker CE could be installed in different ways
 * Most users set up Docker’s repositories and install from them, for ease of installation and upgrade tasks. This is the recommended approach.
 * Some users download the DEB package and install it manually and manage upgrades completely manually. This is useful in situations such as installing Docker on air-gapped systems with no access to the internet.
 * In testing and development environments, some users choose to use automated convenience scripts to install Docker.
@@ -47,7 +47,7 @@ Config before development
 
 Development
 ^^^^^^^^^^^
-Two APIs have been built in api_v1.py::
+Two APIs have been built in api_v1.py
 * Hello_Tracker_1 is built with django_restframework, using GET request to interactive via /users/api/v1/hello_1/(?P<hello_message>.+). It will get user parameter from url and response the parameter value.
 * Hello_Tracker_2 is built with native django, using POST request to interactive via /users/api/v1/hello_1/. It will try to get user parameter 'hello_message' from request and send its value back; if no such parameter, it will send all user post data back.
 * Add route in users/urls.py for API class.
