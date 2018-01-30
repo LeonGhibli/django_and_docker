@@ -1,90 +1,62 @@
 django_and_docker
 =================
 
-A short description of the project.
-
-.. image:: https://img.shields.io/badge/built%20with-Cookiecutter%20Django-ff69b4.svg
-     :target: https://github.com/pydanny/cookiecutter-django/
-     :alt: Built with Cookiecutter Django
+A short description of steps of building django framework and basic Rest API service with cookiecutter django in docker environment. 
 
 
-:License: MIT
+Basic Environment
+-----------------
+Ubuntu 14.04 / Python 3.5
 
 
-Settings
---------
+Steps
+-----
 
-Moved to settings_.
+Uninstall old versions of docker
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+To ensure Docker version and avoid library conflict, remove older versions of Docker which were called docker or docker-engine.
 
-.. _settings: http://cookiecutter-django.readthedocs.io/en/latest/settings.html
+Install Docker CE
+^^^^^^^^^^^^^^^^^
+Docker CE could be installed in different ways:
+* Most users set up Docker’s repositories and install from them, for ease of installation and upgrade tasks. This is the recommended approach.
+* Some users download the DEB package and install it manually and manage upgrades completely manually. This is useful in situations such as installing Docker on air-gapped systems with no access to the internet.
+* In testing and development environments, some users choose to use automated convenience scripts to install Docker.
 
-Basic Commands
---------------
+Due to the limitation of network connection in China，manual approach has been chosen.
+* Access to https://download.docker.com/linux/ubuntu/dists/trusty/pool/stable/amd64/ and download docker-ce_17.12.0~ce-0~ubuntu_amd64.deb 
+* Use FTP to send docker download package to target server.
+* Install Docker CE with dpkg.
+* Verify that Docker CE is installed correctly.
 
-Setting Up Your Users
-^^^^^^^^^^^^^^^^^^^^^
+Install Cookiecutter
+^^^^^^^^^^^^^^^^^^^^
+* Get Cookiecutter via pip.
+* Run cookiecutter command against repo https://github.com/pydanny/cookiecutter-django. To ensure the activation of whitenoise and mailhog, set use_whitenoise and use_mailhog as yes. Also, use_docker should be yes.
+* cd to target project path just initilized.
+* Create a git repo and push it to github.
 
-* To create a **normal user account**, just go to Sign Up and fill out the form. Once you submit it, you'll see a "Verify Your E-mail Address" page. Go to your console to see a simulated email verification message. Copy the link into your browser. Now the user's email should be verified and ready to go.
+Config before development
+^^^^^^^^^^^^^^^^^^^^^^^^^
+* Install docker-compose via pip
+* Build the stack from local.yml via docker-compose. 
+* Boot up via docker-compose to initilize the django framework.
+* Create django superuser via docker-compose
+* Add local ubuntu server IP to ALLOWED_HOSTS for better testing via browser of another local device. 
+* Test mailhog email sending via http://LOCAL_IP:8025 
 
-* To create an **superuser account**, use this command::
+Development
+^^^^^^^^^^^
+Two APIs have been built in api_v1.py:
+* Hello_Tracker_1 is built with django_restframework, using GET request to interactive via /users/api/v1/hello_1/(?P<hello_message>.+). It will get user parameter from url and response the parameter value.
+* Hello_Tracker_2 is built with native django, using POST request to interactive via /users/api/v1/hello_1/. It will try to get user parameter 'hello_message' from request and send its value back; if no such parameter, it will send all user post data back.
+* Add route in users/urls.py for API class.
+* Disable django.middleware.csrf.CsrfViewMiddleware in settings for anonymous API visit. 
 
-    $ python manage.py createsuperuser
+Hello_Tracker_1 tested by broswer request from local device. Hello_Tracker_1 tested by test.py
 
-For convenience, you can keep your normal user logged in on Chrome and your superuser logged in on Firefox (or similar), so that you can see how the site behaves for both kinds of users.
-
-Test coverage
-^^^^^^^^^^^^^
-
-To run the tests, check your test coverage, and generate an HTML coverage report::
-
-    $ coverage run manage.py test
-    $ coverage html
-    $ open htmlcov/index.html
-
-Running tests with py.test
-~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-::
-
-  $ py.test
-
-Live reloading and Sass CSS compilation
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Moved to `Live reloading and SASS compilation`_.
-
-.. _`Live reloading and SASS compilation`: http://cookiecutter-django.readthedocs.io/en/latest/live-reloading-and-sass-compilation.html
-
-
-
-
-Email Server
-^^^^^^^^^^^^
-
-In development, it is often nice to be able to see emails that are being sent from your application. For that reason local SMTP server `MailHog`_ with a web interface is available as docker container.
-
-Container mailhog will start automatically when you will run all docker containers.
-Please check `cookiecutter-django Docker documentation`_ for more details how to start all containers.
-
-With MailHog running, to view messages that are sent by your application, open your browser and go to ``http://127.0.0.1:8025``
-
-.. _mailhog: https://github.com/mailhog/MailHog
-
-
-
-Deployment
-----------
-
-The following details how to deploy this application.
-
-
-
-Docker
-^^^^^^
-
-See detailed `cookiecutter-django Docker documentation`_.
-
-.. _`cookiecutter-django Docker documentation`: http://cookiecutter-django.readthedocs.io/en/latest/deployment-with-docker.html
-
-
-
+Further improvements
+^^^^^^^^^^^^^^^^^^^
+* Rearrange the API route from urls.py in /users to urls in /config so that it would be more convenient to manage api structure in future development.
+* Add authentication control on API calls, ex. username and password verification or token verification.
+* Exception control in logic process of API class.
